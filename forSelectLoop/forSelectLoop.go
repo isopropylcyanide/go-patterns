@@ -5,7 +5,9 @@ import (
 	"time"
 )
 
-//Common patterns involving for/select
+// Zen: A ubiquitous pattern that does a select on the channel and proceeds based on
+// whichever channel were to react first. Can also be used to block forever
+
 func sendIterationValuesOnChannel() {
 	done := make(chan struct{})
 	stringStream := make(chan string, 3)
@@ -31,7 +33,7 @@ func infiniteLooping() {
 	for {
 		select {
 		case <-done:
-			//until done is passed a value, this will exit the select block and loop
+			// until done is passed a value, this will exit the select block and loop
 			return
 		default:
 		}
@@ -50,7 +52,7 @@ func infiniteLoopingII() {
 			fmt.Println("okay")
 			return
 		default:
-			//do work here in default (also an option) however aim for less indentation
+			// do work here in default (also an option) however aim for less indentation
 			fmt.Println("Looping II")
 		}
 	}
@@ -58,8 +60,8 @@ func infiniteLoopingII() {
 
 func main() {
 	sendIterationValuesOnChannel()
-	//this will loop infinitely
+	// this will loop infinitely
 	infiniteLooping()
-	//this will loop infinitely as well
+	// this will loop infinitely as well
 	infiniteLoopingII()
 }
