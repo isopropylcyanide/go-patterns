@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+// Zen: When you do not know the number of channels (to multiplex into one) in advance,
+// you cannot use a static select statement. Instead, use something like an "or channel"
+// that recursively runs a select operation.
+
 // or Multiplexes multiple channels into one channel that closes if any of its component
 // channels close. Useful, when you don't know the number of channels in advance
 // the input ch and the output ch are read only
