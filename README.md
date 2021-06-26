@@ -14,5 +14,6 @@ Various patterns and dabble in Golang.
 | Goroutine leaks | You create a goroutine, you better ensure to stop it | Concurrency in Go |
 | Or Channel | Multiplexes multiple channels not known in advance into one channel | Concurrency in Go |
 | Semaphore Worker Pool | Restrict number of worker in the pool using semaphore | Ultimate Go Programming |
+| Pipelines | Using channel to create pipelined stages | Concurrency in Go |
 
 
