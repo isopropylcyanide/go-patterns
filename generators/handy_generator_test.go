@@ -1,8 +1,24 @@
-package main
+package handy_generators
 
 import (
 	"testing"
 )
+
+func TestRepeatGeneratorDemo(t *testing.T) {
+	RepeatGeneratorDemo()
+}
+
+func TestTakeGeneratorDemo(t *testing.T) {
+	TakeGeneratorDemo()
+}
+
+func TestRepeatFunctionWithTakeDemo(t *testing.T) {
+	RepeatFunctionWithTakeDemo()
+}
+
+func TestToStringRepeatFunctionWithTakeDemo(t *testing.T) {
+	ToStringRepeatFunctionWithTakeDemo()
+}
 
 func BenchmarkTakeRepeatGeneric(b *testing.B) {
 	done := make(chan interface{})

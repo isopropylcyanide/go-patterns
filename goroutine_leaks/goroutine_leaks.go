@@ -1,4 +1,4 @@
-package main
+package goroutine_leaks
 
 import (
 	"fmt"
@@ -9,8 +9,8 @@ import (
 // Zen: If a goroutine creates another goroutine, it's also responsible for ensuring
 // that it can stop the started goroutine
 
-// Shows a go func that never ends and is essentially leaked
-func leakGoRoutineBlockedOnReading() {
+// LeakGoRoutineBlockedOnReading shows a go func that never ends and is essentially leaked
+func LeakGoRoutineBlockedOnReading() {
 	doWork := func(strings <-chan string) <-chan interface{} {
 		completed := make(chan interface{})
 		go func() {
@@ -27,9 +27,9 @@ func leakGoRoutineBlockedOnReading() {
 	doWork(nil)
 }
 
-// this is the same as leakGoRoutineBlockedOnReading but proves that the goroutine runs forever
-// when there's a deadlock in the main waiting for the go func to complete
-func leakGoRoutineBlockedOnReadingDeadlock() {
+// LeakGoRoutineBlockedOnReadingDeadlock is the same as LeakGoRoutineBlockedOnReading but proves
+// that the goroutine runs forever when there's a deadlock in the main waiting for the go func to complete
+func LeakGoRoutineBlockedOnReadingDeadlock() {
 	//var wg sync.WaitGroup
 	//wg.Add(1)
 	doWork := func(strings <-chan string) <-chan interface{} {
@@ -48,9 +48,10 @@ func leakGoRoutineBlockedOnReadingDeadlock() {
 	<-results
 }
 
-// We fix the leak by using a done channel that fixes the leak by satisfying the
-// goroutine's select call in which case it returns after seeing a done value
-func leakGoRoutineBlockedOnReadingFixedUsingDoneChannel() {
+// LeakGoRoutineBlockedOnReadingFixedUsingDoneChannel is where we fix the leak by using a done
+// channel that fixes the leak by satisfying the goroutine's select call in which case it
+// returns after seeing a done value
+func LeakGoRoutineBlockedOnReadingFixedUsingDoneChannel() {
 	// done is a read only channel
 	doWork := func(done <-chan interface{}, strings <-chan string) <-chan interface{} {
 		results := make(chan interface{})
@@ -86,9 +87,9 @@ func leakGoRoutineBlockedOnReadingFixedUsingDoneChannel() {
 	fmt.Println("done")
 }
 
-// This go routine writes something on the channel but no one closes it
+// LeakGoRoutineBlockedOnWriting writes something on the channel but no one closes it
 // after the main has read some items off the channel
-func leakGoRoutineBlockedOnWriting() {
+func LeakGoRoutineBlockedOnWriting() {
 	doWork := func() <-chan int {
 		results := make(chan int)
 		go func() {
@@ -108,9 +109,10 @@ func leakGoRoutineBlockedOnWriting() {
 	fmt.Println("Done")
 }
 
-// Same as leakGoRoutineBlockedOnWriting but there's no leak here because the main closes
-// the channel and the random generator goroutine knows its time to stop
-func leakGoRoutineBlockedOnWritingFixedUsingDoneChannel() {
+// LeakGoRoutineBlockedOnWritingFixedUsingDoneChannel is the same as LeakGoRoutineBlockedOnWriting
+// but there's no leak here because the main closes the channel and the random generator goroutine
+// knows its time to stop
+func LeakGoRoutineBlockedOnWritingFixedUsingDoneChannel() {
 	doWork := func(done <-chan interface{}) <-chan int {
 		results := make(chan int)
 		go func() {
@@ -136,14 +138,4 @@ func leakGoRoutineBlockedOnWritingFixedUsingDoneChannel() {
 	close(done)
 	// wait for some time so that you see the child defer
 	time.Sleep(100 * time.Millisecond)
-}
-
-func main() {
-	leakGoRoutineBlockedOnReading()
-	// Uncomment below to see the deadlock
-	// leakGoRoutineBlockedOnReadingDeadlock()
-	leakGoRoutineBlockedOnReadingFixedUsingDoneChannel()
-
-	leakGoRoutineBlockedOnWriting()
-	leakGoRoutineBlockedOnWritingFixedUsingDoneChannel()
 }

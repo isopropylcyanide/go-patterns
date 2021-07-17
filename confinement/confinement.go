@@ -1,4 +1,4 @@
-package main
+package confinement
 
 import (
 	"bytes"
@@ -10,7 +10,7 @@ import (
 // Immutability and confinement. In confinement you restrict the scope, either through standards
 // or lexically. Confinement is lightweight has a lower developer cognitive load.
 
-func adhocConfinement() {
+func AdhocConfinement() {
 	// data is accessible from both goroutines but by convention we only access it
 	// in the #loopData goroutine. This is an adhoc confinement and is fragile because
 	// data maybe accessed in any other way downstream, say when someone adds line #25
@@ -33,7 +33,7 @@ func adhocConfinement() {
 	fmt.Println("Done consuming")
 }
 
-func lexicalConfinement() {
+func LexicalConfinement() {
 	// notice we emit a read only channel because we own the write & closure
 	producer := func() <-chan int {
 		// channel is instantiated within the lexical scope pf producer
@@ -59,7 +59,7 @@ func lexicalConfinement() {
 	consumer(producerDataStream)
 }
 
-func lexicalConfinementII() {
+func LexicalConfinementII() {
 	printData := func(wg *sync.WaitGroup, data []byte) {
 		defer wg.Done()
 		var buff bytes.Buffer
@@ -77,10 +77,4 @@ func lexicalConfinementII() {
 	go printData(&wg, data[:3])
 	go printData(&wg, data[3:])
 	wg.Wait()
-}
-
-func main() {
-	adhocConfinement()
-	lexicalConfinement()
-	lexicalConfinementII()
 }

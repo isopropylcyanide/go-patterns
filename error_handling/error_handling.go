@@ -1,4 +1,4 @@
-package main
+package error_handling
 
 import (
 	"fmt"
@@ -9,8 +9,8 @@ import (
 // couple the potential result with a potential error so that the calling goroutine
 // (which has more context about the running program) is able to take informed decisions
 
-// this function fetches http responses but is unable to pass/communicate an error event
-func errorHandlingThatIsNotAbleToPropagateValues() {
+// ErrorHandlingThatIsNotAbleToPropagateValues fetches http responses but is unable to pass/communicate an error event
+func ErrorHandlingThatIsNotAbleToPropagateValues() {
 	checkStatus := func(done <-chan interface{}, urls ...string) <-chan *http.Response {
 		responses := make(chan *http.Response)
 		go func() {
@@ -51,8 +51,8 @@ type Result struct {
 	Url      string
 }
 
-// this function fetches http responses and is able to pass/communicate an error event
-func errorHandlingThatIsAbleToPropagateValues() {
+// ErrorHandlingThatIsAbleToPropagateValues function fetches http responses and is able to pass/communicate an error event
+func ErrorHandlingThatIsAbleToPropagateValues() {
 	checkStatus := func(done <-chan interface{}, urls ...string) <-chan Result {
 		results := make(chan Result)
 		go func() {
@@ -85,9 +85,4 @@ func errorHandlingThatIsAbleToPropagateValues() {
 		}
 		fmt.Printf("Response for %v: %d\n", res.Url, res.Response.StatusCode)
 	}
-}
-
-func main() {
-	errorHandlingThatIsNotAbleToPropagateValues()
-	errorHandlingThatIsAbleToPropagateValues()
 }

@@ -12,9 +12,10 @@ Various patterns and dabble in Golang.
 | For Select | Common idiom when dealing with selection on multiple channels | Concurrency in Go |
 | Error Handling | Separate the concerns of error handling from a producer goroutine | Concurrency in Go |
 | Goroutine leaks | You create a goroutine, you better ensure to stop it | Concurrency in Go |
-| Or Channel | Multiplexes multiple channels not known in advance into one channel | Concurrency in Go |
+| Channel Patterns | Patterns to multiplex multiple channels | Concurrency in Go |
 | Semaphore Worker Pool | Restrict number of worker in the pool using semaphore | Ultimate Go Programming |
 | Pipelines | Using channel to create pipelined stages | Concurrency in Go |
 | Generators | Using channels to create memory efficient generators for pipelined stages | Concurrency in Go |
+| Fan In/Out | Fanning pipeline stages in/out for performance and efficiency | Concurrency in Go |
 
 

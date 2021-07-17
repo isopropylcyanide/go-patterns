@@ -1,4 +1,4 @@
-package main
+package handy_generators
 
 import (
 	"fmt"
@@ -61,6 +61,8 @@ func Take(done <-chan interface{}, input <-chan interface{}, num int) <-chan int
 	return ch
 }
 
+// ToString takes an input channel of type interface and converts the values into its
+// string type using cast
 func ToString(done <-chan interface{}, input <-chan interface{}) <-chan string {
 	ch := make(chan string)
 	go func() {
@@ -123,11 +125,4 @@ func ToStringRepeatFunctionWithTakeDemo() {
 	for v := range ToString(done, Take(done, Repeat(done, "H1", "H3", "H4"), 5)) {
 		fmt.Printf("ToStringTakeRepeat %v -> \n", v)
 	}
-}
-
-func main() {
-	RepeatGeneratorDemo()
-	TakeGeneratorDemo()
-	RepeatFunctionWithTakeDemo()
-	ToStringRepeatFunctionWithTakeDemo()
 }

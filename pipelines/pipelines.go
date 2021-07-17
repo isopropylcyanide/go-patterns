@@ -1,4 +1,4 @@
-package main
+package pipelines
 
 import "fmt"
 
@@ -8,9 +8,9 @@ import "fmt"
 // Requirements: Each stage consumes and returns the same type
 // Requirements: Stage must be reified by the language so that they can be passed around
 
-// rudimentaryBatchPipeline A batch pipeline where we process inputs in chunks at once.
+// RudimentaryBatchPipeline A batch pipeline where we process inputs in chunks at once.
 // Each function returns and consumes a slice of data and not discrete elements
-func rudimentaryBatchPipeline() {
+func RudimentaryBatchPipeline() {
 	add := func(list []int, additive int) []int {
 		res := make([]int, len(list))
 		// using range here means the memory footprint is high, but easier for the caller
@@ -31,9 +31,9 @@ func rudimentaryBatchPipeline() {
 	fmt.Println("Batch ", output)
 }
 
-// rudimentaryStreamPipeline A stream pipeline where we process inputs one at a time
+// RudimentaryStreamPipeline A stream pipeline where we process inputs one at a time
 // Each function returns and consumes a discrete value
-func rudimentaryStreamPipeline() {
+func RudimentaryStreamPipeline() {
 	add := func(input int, additive int) int {
 		return input + additive
 	}
@@ -51,7 +51,7 @@ func rudimentaryStreamPipeline() {
 
 // ChannelStreamPipeline Channels are suited to pipelines because they can receive and signal values,
 // are safe to use concurrently, can be ranged over and are reified by Go
-func channelStreamPipeline() {
+func ChannelStreamPipeline() {
 	// a generator is used to convert input into a channel that signals input (write)
 	// a read only done channel is used to know when to stop
 	// we return a read only channel because callers are only going to read
@@ -108,6 +108,7 @@ func channelStreamPipeline() {
 
 	// a done channel essentially signals the end of processing (poison pill)
 	done := make(chan interface{})
+
 	// regardless of what stage a pipeline is in, closing done, will close it
 	defer close(done)
 
@@ -116,11 +117,4 @@ func channelStreamPipeline() {
 	for v := range multiply(add(multiply(intStream, done, 2), done, 1), done, 2) {
 		fmt.Println("From channel ", v)
 	}
-	//close job channel
-}
-
-func main() {
-	rudimentaryBatchPipeline()
-	rudimentaryStreamPipeline()
-	channelStreamPipeline()
 }

@@ -1,4 +1,4 @@
-package main
+package for_select_loop
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 // Zen: A ubiquitous pattern that does a select on the channel and proceeds based on
 // whichever channel were to react first. Can also be used to block forever
 
-func sendIterationValuesOnChannel() {
+func SendIterationValuesOnChannel() {
 	done := make(chan struct{})
 	stringStream := make(chan string, 3)
 
@@ -28,7 +28,7 @@ func sendIterationValuesOnChannel() {
 	}
 }
 
-func infiniteLooping() {
+func InfiniteLooping() {
 	done := make(chan struct{})
 	for {
 		select {
@@ -42,7 +42,7 @@ func infiniteLooping() {
 	}
 }
 
-func infiniteLoopingII() {
+func InfiniteLoopingII() {
 	done := make(chan struct{})
 	for {
 		select {
@@ -56,12 +56,4 @@ func infiniteLoopingII() {
 			fmt.Println("Looping II")
 		}
 	}
-}
-
-func main() {
-	sendIterationValuesOnChannel()
-	// this will loop infinitely
-	infiniteLooping()
-	// this will loop infinitely as well
-	infiniteLoopingII()
 }
