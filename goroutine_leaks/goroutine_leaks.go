@@ -81,7 +81,7 @@ func LeakGoRoutineBlockedOnReadingFixedUsingDoneChannel() {
 		time.Sleep(time.Duration(tolerance) * time.Second)
 		fmt.Println("cancelling the go routine that would have leaked otherwise")
 		close(done)
-	}(1)
+	}(2)
 
 	<-result
 	fmt.Println("done")
@@ -94,6 +94,7 @@ func LeakGoRoutineBlockedOnWriting() {
 		results := make(chan int)
 		go func() {
 			// you will see that no one closes the channel
+			// the results() not closing is the leak
 			defer close(results)
 			defer fmt.Println("closing the infinite generation")
 			for {
@@ -122,6 +123,7 @@ func LeakGoRoutineBlockedOnWritingFixedUsingDoneChannel() {
 			for {
 				select {
 				case <-done:
+					fmt.Println("GoRoutine closing. Leak avoided")
 					return
 				case results <- rand.Int():
 				}

@@ -1,11 +1,5 @@
 package handy_generators
 
-import (
-	"fmt"
-	"math/rand"
-	"time"
-)
-
 // Zen: A generator for a pipeline is any function that converts a set of discrete set of values
 // into a stream of values on a channel. Using channels / done idiom, we can generate efficient
 // generators
@@ -78,51 +72,19 @@ func ToString(done <-chan interface{}, input <-chan interface{}) <-chan string {
 	return ch
 }
 
-// RepeatGeneratorDemo demonstrates the usage of Repeat
-func RepeatGeneratorDemo() {
-	done := make(chan interface{})
-	// here we would Repeat forever. to curb this, lets close channel in an another goroutine
-	// that will let the main run for sometime until "it" (not main) closes channel
+// ToInt takes an input channel of type interface and converts the values into its
+// int type using cast
+func ToInt(done <-chan interface{}, input <-chan interface{}) <-chan int {
+	ch := make(chan int)
 	go func() {
-		time.Sleep(100 * time.Microsecond)
-		close(done)
+		defer close(ch)
+		for v := range input {
+			select {
+			case <-done:
+				return
+			case ch <- v.(int):
+			}
+		}
 	}()
-
-	for v := range Repeat(done, 1, 2, 3, 4) {
-		fmt.Printf("Repeat %v -> \n", v)
-	}
-}
-
-// TakeGeneratorDemo demonstrates the usage of Take
-func TakeGeneratorDemo() {
-	done := make(chan interface{})
-	defer close(done)
-
-	for v := range Take(done, Repeat(done, 1, 2, 3, 4), 10) {
-		fmt.Printf("Take %v -> \n", v)
-	}
-}
-
-// RepeatFunctionWithTakeDemo demonstrates the usage of Take on a RepeatFWithFn
-func RepeatFunctionWithTakeDemo() {
-	done := make(chan interface{})
-	defer close(done)
-
-	fn := func() interface{} {
-		return rand.Int()
-	}
-	for v := range Take(done, RepeatWithFn(done, fn), 4) {
-		fmt.Printf("TakeRepeatFn %v -> \n", v)
-	}
-}
-
-// ToStringRepeatFunctionWithTakeDemo demonstrates the usage of ToString applied on a list of input
-// We'll also write a benchmark to prove that adding to string doesn't add lot of overhead
-func ToStringRepeatFunctionWithTakeDemo() {
-	done := make(chan interface{})
-	defer close(done)
-
-	for v := range ToString(done, Take(done, Repeat(done, "H1", "H3", "H4"), 5)) {
-		fmt.Printf("ToStringTakeRepeat %v -> \n", v)
-	}
+	return ch
 }

@@ -10,7 +10,7 @@ import "fmt"
 
 // RudimentaryBatchPipeline A batch pipeline where we process inputs in chunks at once.
 // Each function returns and consumes a slice of data and not discrete elements
-func RudimentaryBatchPipeline() {
+func RudimentaryBatchPipeline() []int {
 	add := func(list []int, additive int) []int {
 		res := make([]int, len(list))
 		// using range here means the memory footprint is high, but easier for the caller
@@ -29,11 +29,12 @@ func RudimentaryBatchPipeline() {
 	input := []int{1, 2, 3, 4}
 	output := multiply(add(multiply(input, 2), 1), 2)
 	fmt.Println("Batch ", output)
+	return output
 }
 
 // RudimentaryStreamPipeline A stream pipeline where we process inputs one at a time
 // Each function returns and consumes a discrete value
-func RudimentaryStreamPipeline() {
+func RudimentaryStreamPipeline() []int {
 	add := func(input int, additive int) int {
 		return input + additive
 	}
@@ -41,17 +42,23 @@ func RudimentaryStreamPipeline() {
 		return input * multiplier
 	}
 	input := []int{1, 2, 3, 4}
+	outputs := make([]int, 0)
 	for _, v := range input {
 		// this range loop limits our ability to scale and feed the pipeline
 		// we are also making multiple function calls for each iteration
 		output := multiply(add(multiply(v, 2), 1), 2)
 		fmt.Println("Streaming ", output)
+		outputs = append(outputs, output)
 	}
+	return outputs
 }
 
 // ChannelStreamPipeline Channels are suited to pipelines because they can receive and signal values,
 // are safe to use concurrently, can be ranged over and are reified by Go
-func ChannelStreamPipeline() {
+func ChannelStreamPipeline(done chan interface{}) <-chan int {
+	// the done channel is given by callers which know when to stop the pipeline
+	// if we create it here, we need to close it, which means caller will never see the output
+
 	// a generator is used to convert input into a channel that signals input (write)
 	// a read only done channel is used to know when to stop
 	// we return a read only channel because callers are only going to read
@@ -105,16 +112,6 @@ func ChannelStreamPipeline() {
 		}()
 		return res
 	}
-
-	// a done channel essentially signals the end of processing (poison pill)
-	done := make(chan interface{})
-
-	// regardless of what stage a pipeline is in, closing done, will close it
-	defer close(done)
-
 	intStream := generator(done, 1, 2, 3, 4)
-
-	for v := range multiply(add(multiply(intStream, done, 2), done, 1), done, 2) {
-		fmt.Println("From channel ", v)
-	}
+	return multiply(add(multiply(intStream, done, 2), done, 1), done, 2)
 }

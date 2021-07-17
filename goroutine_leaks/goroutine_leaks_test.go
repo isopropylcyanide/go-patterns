@@ -11,6 +11,10 @@ func TestLeakGoRoutineBlockedOnReadingDeadlock(t *testing.T) {
 	LeakGoRoutineBlockedOnReadingDeadlock()
 }
 
+func TestLeakGoRoutineBlockedOnReadingFixedUsingDoneChannel(t *testing.T) {
+	LeakGoRoutineBlockedOnReadingFixedUsingDoneChannel()
+}
+
 func TestLeakGoRoutineBlockedOnWriting(t *testing.T) {
 	LeakGoRoutineBlockedOnWriting()
 }
