@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"go.uber.org/goleak"
 )
 
 func TestRunNonSemaphorePool(t *testing.T) {
@@ -34,4 +36,8 @@ func getCommonWork() func(id int, ch chan<- string) {
 		time.Sleep(time.Second)
 		ch <- fmt.Sprintf("Done #%d", id)
 	}
+}
+
+func TestMain(m *testing.M) {
+	goleak.VerifyTestMain(m)
 }

@@ -12,6 +12,9 @@ import (
 
 // ErrorHandlingThatIsNotAbleToPropagateValues fetches http responses but is unable to pass/communicate an error event
 func ErrorHandlingThatIsNotAbleToPropagateValues(urls ...string) {
+	done := make(chan interface{})
+	defer close(done)
+
 	checkStatus := func(done <-chan interface{}, urls ...string) <-chan *http.Response {
 		responses := make(chan *http.Response)
 		go func() {
@@ -34,9 +37,6 @@ func ErrorHandlingThatIsNotAbleToPropagateValues(urls ...string) {
 		return responses
 	}
 
-	done := make(chan interface{})
-	defer close(done)
-
 	for resp := range checkStatus(done, urls...) {
 		fmt.Printf("Response for %v: %d\n", resp.Request.URL, resp.StatusCode)
 	}
@@ -48,8 +48,12 @@ type Result struct {
 	Url      string
 }
 
-// ErrorHandlingThatIsAbleToPropagateValues function fetches http responses and is able to pass/communicate an error event
+// ErrorHandlingThatIsAbleToPropagateValues function fetches http responses and
+// is able to pass/communicate an error event as it emits a channel of result values
 func ErrorHandlingThatIsAbleToPropagateValues(urls ...string) error {
+	done := make(chan interface{})
+	defer close(done)
+
 	checkStatus := func(done <-chan interface{}, urls ...string) <-chan Result {
 		results := make(chan Result)
 		go func() {
@@ -67,8 +71,6 @@ func ErrorHandlingThatIsAbleToPropagateValues(urls ...string) error {
 		}()
 		return results
 	}
-	done := make(chan interface{})
-	defer close(done)
 
 	for res := range checkStatus(done, urls...) {
 		if res.Error != nil {

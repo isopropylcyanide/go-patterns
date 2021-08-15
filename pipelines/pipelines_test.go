@@ -5,6 +5,8 @@ import (
 	"reflect"
 	"testing"
 
+	"go.uber.org/goleak"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -54,4 +56,8 @@ func BenchmarkChannelStream(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		ChannelStreamPipeline(ch)
 	}
+}
+
+func TestMain(m *testing.M) {
+	goleak.VerifyTestMain(m)
 }

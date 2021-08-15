@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/goleak"
 )
 
 func TestTee(t *testing.T) {
@@ -22,4 +23,10 @@ func TestTee(t *testing.T) {
 		assert.Equal(t, v1, v2)
 		fmt.Printf("TeeA received [%v] and TeeB received [%v]\n", v1, v2)
 	}
+}
+
+func TestMain(m *testing.M) {
+	goleak.VerifyTestMain(m,
+		goleak.IgnoreTopFunction("time.Sleep"), //tests that sleep in goroutines explicitly
+	)
 }

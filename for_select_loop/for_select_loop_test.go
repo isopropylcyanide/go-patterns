@@ -1,17 +1,25 @@
 package for_select_loop
 
-import "testing"
+import (
+	"testing"
+
+	"go.uber.org/goleak"
+)
 
 func TestSendIterationValuesOnChannel(t *testing.T) {
 	SendIterationValuesOnChannel()
 }
 
 func TestInfiniteLooping(t *testing.T) {
-	// this will loop infinitely
+	t.Skipf("Skipping test as this will loop infinitely ")
 	InfiniteLooping()
 }
 
 func TestInfiniteLoopingII(t *testing.T) {
-	// this will loop infinitely as well
+	t.Skipf("Skipping test as this will loop infinitely ")
 	InfiniteLoopingII()
+}
+
+func TestMain(m *testing.M) {
+	goleak.VerifyTestMain(m)
 }

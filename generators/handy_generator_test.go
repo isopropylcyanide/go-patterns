@@ -6,6 +6,8 @@ import (
 	"testing"
 	"time"
 
+	"go.uber.org/goleak"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -138,4 +140,8 @@ func BenchmarkTakeRepeatTyped(b *testing.B) {
 
 	for range take(done, repeat(done, "a", "b"), b.N) {
 	}
+}
+
+func TestMain(m *testing.M) {
+	goleak.VerifyTestMain(m)
 }
