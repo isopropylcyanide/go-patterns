@@ -16,7 +16,7 @@ func ErrorHandlingThatIsNotAbleToPropagateValues(urls ...string) {
 		responses := make(chan *http.Response)
 		go func() {
 			defer close(responses)
-			//make request
+			// make request
 			for _, url := range urls {
 				resp, err := http.Get(url)
 				if err != nil {
@@ -54,7 +54,7 @@ func ErrorHandlingThatIsAbleToPropagateValues(urls ...string) error {
 		results := make(chan Result)
 		go func() {
 			defer close(results)
-			//make request
+			// make request
 			for _, url := range urls {
 				resp, err := http.Get(url)
 				result := Result{Error: err, Response: resp, Url: url}

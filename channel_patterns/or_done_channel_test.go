@@ -2,14 +2,14 @@ package channel_patterns
 
 import (
 	"fmt"
-	handy_generators "patterns/generators"
+	g "patterns/generators"
 	"testing"
 	"time"
 )
 
 func TestOrDone(t *testing.T) {
 	done := signalAfter(100 * time.Microsecond)
-	items := handy_generators.Repeat(done, 1, 2, 3)
+	items := g.Repeat(done, 1, 2, 3)
 
 	for val := range OrDone(done, items) {
 		fmt.Printf("Received %v\n", val)
@@ -18,7 +18,7 @@ func TestOrDone(t *testing.T) {
 
 func TestOrDoneNaive(t *testing.T) {
 	done := signalAfter(100 * time.Microsecond)
-	items := handy_generators.Repeat(done, 1, 2, 3)
+	items := g.Repeat(done, 1, 2, 3)
 
 	for {
 		// this is boilerplate and will be unwieldy in a nested loop scenario

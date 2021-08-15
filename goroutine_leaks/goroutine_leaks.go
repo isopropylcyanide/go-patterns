@@ -30,8 +30,8 @@ func LeakGoRoutineBlockedOnReading() {
 // LeakGoRoutineBlockedOnReadingDeadlock is the same as LeakGoRoutineBlockedOnReading but proves
 // that the goroutine runs forever when there's a deadlock in the main waiting for the go func to complete
 func LeakGoRoutineBlockedOnReadingDeadlock() {
-	//var wg sync.WaitGroup
-	//wg.Add(1)
+	// var wg sync.WaitGroup
+	// wg.Add(1)
 	doWork := func(strings <-chan string) <-chan interface{} {
 		completed := make(chan interface{})
 		go func() {

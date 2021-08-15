@@ -25,13 +25,13 @@ func TestChannelStreamPipeline(t *testing.T) {
 	// regardless of what stage a pipeline is in, closing done, will close it
 	defer close(done)
 
-	//expectedOutput := []int{6, 10, 14, 18}
+	// expectedOutput := []int{6, 10, 14, 18}
 	actualOutput := make([]int, 0)
 	for v := range ChannelStreamPipeline(done) {
 		fmt.Println("From channel ", v)
 		actualOutput = append(actualOutput, v)
 	}
-	//assert.True(t, reflect.DeepEqual(actualOutput, expectedOutput))
+	// assert.True(t, reflect.DeepEqual(actualOutput, expectedOutput))
 }
 
 func BenchmarkRudimentaryBatch(b *testing.B) {

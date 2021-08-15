@@ -37,7 +37,7 @@ func InfiniteLooping() {
 			return
 		default:
 		}
-		//do work here
+		// do work here
 		fmt.Println("Looping")
 	}
 }
