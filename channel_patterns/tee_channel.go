@@ -4,7 +4,8 @@ package channel_patterns
 // Usually used to carry out two independent units of work from an input
 
 // Tee returns two separate channels from where a single input value can be read separately
-func Tee(done chan interface{}, input <-chan interface{}) (<-chan interface{}, <-chan interface{}) {
+// Tee behaves like a de-multiplexer
+func Tee(done <-chan interface{}, input <-chan interface{}) (<-chan interface{}, <-chan interface{}) {
 	teeA := make(chan interface{})
 	teeB := make(chan interface{})
 

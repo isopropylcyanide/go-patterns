@@ -19,8 +19,8 @@ func Or(channels ...<-chan interface{}) <-chan interface{} {
 		defer close(orChannel)
 		switch len(channels) {
 		case 2:
-			// this case block and switch can be removed. It is only
-			// a minor optimization to avoid recursion overhead (always 2 channels)
+			// this case block and switch can be removed. It is only a minor
+			// optimization to avoid recursion overhead (always 2 channels)
 			select {
 			case <-channels[0]:
 			case <-channels[1]:
