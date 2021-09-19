@@ -22,14 +22,24 @@ import (
 //    - S2) In stages where batching will lead to higher efficiency
 
 func BenchmarkUnbufferedWrite(b *testing.B) {
-	PerformSimpleWrite(b, tmpFileOrFatal())
+	performSimpleWrite(b, tmpFileOrFatal())
 }
 
 // Bufio queues writes internally into a buffer and implements queuing
 // This satisfies the condition A1 as batching leads to performance
 func BenchmarkBufferedWrite(b *testing.B) {
 	bufferedFile := bufio.NewWriter(tmpFileOrFatal())
-	PerformSimpleWrite(b, bufferedFile)
+	performSimpleWrite(b, bufferedFile)
+}
+
+func performSimpleWrite(b *testing.B, writer io.Writer) {
+	done := make(chan interface{})
+	defer close(done)
+	b.ResetTimer()
+	for bt := range g.Take(done, g.Repeat(done, byte(0)), b.N) {
+		_, _ = writer.Write([]byte{bt.(byte)})
+	}
+
 }
 
 func tmpFileOrFatal() *os.File {
@@ -38,13 +48,4 @@ func tmpFileOrFatal() *os.File {
 		log.Fatalf("error: %v", err)
 	}
 	return file
-}
-func PerformSimpleWrite(b *testing.B, writer io.Writer) {
-	done := make(chan interface{})
-	defer close(done)
-	b.ResetTimer()
-	for bt := range g.Take(done, g.Repeat(done, byte(0)), b.N) {
-		_, _ = writer.Write([]byte{bt.(byte)})
-	}
-
 }
