@@ -2,7 +2,7 @@
 Various patterns and dabble in Golang.
 
 ## Sources
-- [Concurrency in Go](https:// www.oreilly.com/library/view/concurrency-in-go/9781491941294/)
+- [Concurrency in Go](https://www.oreilly.com/library/view/concurrency-in-go/9781491941294/)
 - [Hands on Go Programming](https://books.google.co.in/books/about/Hands_on_Go_Programming.html?id=Q3whEAAAQBAJ&redir_esc=y)
 - [Ultimate Go Programming](https://learning.oreilly.com/videos/ultimate-go-programming)
 
