@@ -17,5 +17,6 @@ Various patterns and dabble in Golang.
 | Pipelines | Using channel to create pipelined stages | Concurrency in Go |
 | Generators | Using channels to create memory efficient generators for pipelined stages | Concurrency in Go |
 | Fan In/Out | Fanning pipeline stages in/out for performance and efficiency | Concurrency in Go |
+| Error Propagation | Using wrapped high level errors to propagate errors | Concurrency in Go |
 
 
