@@ -8,9 +8,9 @@ import "time"
 // come in, our goroutine might be sitting around waiting for something to happen. Thus, a
 // heartbeat is a way to signal to its listeners that all is well and silence is expected.
 
-// BasicHeartbeatAndResult is a function that provides a channel which is signalled every
+// HeartbeatAndResult is a function that provides a channel which is signalled every
 // pulse interval seconds along with a result channel that is signalled at double the interval
-func BasicHeartbeatAndResult(done <-chan interface{}, pulseInterval time.Duration) (<-chan interface{}, <-chan time.Time) {
+func HeartbeatAndResult(done <-chan interface{}, pulseInterval time.Duration) (<-chan interface{}, <-chan time.Time) {
 	heartbeatCh := make(chan interface{})
 	resultCh := make(chan time.Time) // result channel could be on anything, we just send time
 
@@ -56,10 +56,10 @@ func sendPulse(heartbeatCh chan<- interface{}) {
 	}
 }
 
-// BasicHeartbeatAndResultFaulty is same as BasicHeartbeatAndResult but fails after two iterations
+// HeartbeatAndResultFaulty is same as HeartbeatAndResult but fails after two iterations
 // and doesn't close its channel, which results in a panic. This will be detected as no pulse and
 // the main goroutine can take appropriate action
-func BasicHeartbeatAndResultFaulty(done <-chan interface{}, pulseInterval time.Duration) (<-chan interface{}, <-chan time.Time) {
+func HeartbeatAndResultFaulty(done <-chan interface{}, pulseInterval time.Duration) (<-chan interface{}, <-chan time.Time) {
 	heartbeatCh := make(chan interface{})
 	resultCh := make(chan time.Time) // result channel could be on anything, we just send time
 

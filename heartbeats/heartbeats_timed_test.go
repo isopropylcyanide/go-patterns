@@ -6,22 +6,22 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-
-	"go.uber.org/goleak"
 )
 
-func TestBasicHeartbeatWithResult(t *testing.T) {
+// TestHeartbeatWithResult checks a happy case where the worker goroutine is never unhealthy
+// which is determined by the lack of it sending a heartbeat after a certain grace period.
+func TestHeartbeatWithResult(t *testing.T) {
 	t.Parallel()
 	done := make(chan interface{})
 	// close done channel after 6 seconds to give some room for the routine to work
-	time.AfterFunc(6*time.Second, func() { close(done) })
+	time.AfterFunc(4*time.Second, func() { close(done) })
 
 	// we are waiting for upto two seconds until we pronounce the goroutine as unhealthy
-	const timeout = time.Second * 2
+	const timeout = time.Second * 1
 
 	// when there are no results, we are at least guaranteed to get a heartbeat every t/2
 	// if we do not receive it, something is wrong with the goroutine
-	pulses, results := BasicHeartbeatAndResult(done, timeout/2)
+	pulses, results := HeartbeatAndResult(done, timeout/2)
 
 	for {
 		select {
@@ -42,15 +42,17 @@ func TestBasicHeartbeatWithResult(t *testing.T) {
 	}
 }
 
-func TestBasicHeartbeatWithResultUnhealthyIsDetected(t *testing.T) {
+// TestHeartbeatWithResultUnhealthyIsDetected is same as TestBasicHeartbeatWithResultUnhealthy,
+// but we detect a failure (if we see no heartbeat) this way we avoid a deadlock and do not
+// have to rely on a longer timeout
+func TestHeartbeatWithResultUnhealthyIsDetected(t *testing.T) {
 	t.Parallel()
-	// same as TestBasicHeartbeatWithResultUnhealthy but we detect a failure (no heartbeat)
-	// this way we avoid a deadlock and do not have to rely on a longer timeout
+	//
 	done := make(chan interface{})
-	time.AfterFunc(6*time.Second, func() { close(done) })
-	const timeout = time.Second * 2
+	time.AfterFunc(4*time.Second, func() { close(done) })
+	const timeout = time.Second * 1
 
-	pulses, results := BasicHeartbeatAndResultFaulty(done, timeout/2)
+	pulses, results := HeartbeatAndResultFaulty(done, timeout/2)
 	failureDetected := false
 L:
 	for {
@@ -76,8 +78,4 @@ L:
 		}
 	}
 	assert.True(t, failureDetected)
-}
-
-func TestMain(m *testing.M) {
-	goleak.VerifyTestMain(m)
 }
