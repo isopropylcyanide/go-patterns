@@ -1,6 +1,7 @@
 package replicated_requests
 
 import (
+	"context"
 	"fmt"
 	"math/rand"
 	"sync"
@@ -24,7 +25,7 @@ import (
 
 // DoWork processes a request with a given id with a random delay. This is equivalent to a
 // handler. The calling code will spawn multiple instances of the handler
-func DoWork(done <-chan interface{}, id int, wg *sync.WaitGroup, result chan<- int) {
+func DoWork(ctx context.Context, id int, wg *sync.WaitGroup, result chan<- int) {
 	started := time.Now()
 	defer wg.Done()
 
@@ -32,14 +33,14 @@ func DoWork(done <-chan interface{}, id int, wg *sync.WaitGroup, result chan<- i
 	delay := time.Duration(1+rand.Intn(5)) * time.Second
 
 	select {
-	case <-done:
+	case <-ctx.Done():
 		fmt.Printf("handler %v has been cancelled pre sleep of %v seconds\n", id, delay)
 		return // we have been cancelled
 	case <-time.After(delay):
 	}
 
 	select {
-	case <-done: // we might be cancelled, even after sleep
+	case <-ctx.Done(): // we might be cancelled, even after sleep
 		fmt.Printf("handler %v has been cancelled post sleep of %v seconds\n", id, delay)
 	case result <- id:
 	}

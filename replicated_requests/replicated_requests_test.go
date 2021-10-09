@@ -1,6 +1,7 @@
 package replicated_requests
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"testing"
@@ -11,13 +12,13 @@ import (
 )
 
 func TestDoWork(t *testing.T) {
-	done := make(chan interface{})
+	ctx, cancelFunc := context.WithCancel(context.Background())
 	result := make(chan int)
 	var wg sync.WaitGroup
 	wg.Add(10)
 
 	for i := 0; i < 10; i++ {
-		go DoWork(done, i, &wg, result)
+		go DoWork(ctx, i, &wg, result)
 	}
 
 	r := <-result // select the first result
@@ -25,7 +26,7 @@ func TestDoWork(t *testing.T) {
 	assert.True(t, r < 10)
 
 	// no need for the remaining handlers, cancel them
-	close(done)
+	cancelFunc()
 	wg.Wait()
 }
 
