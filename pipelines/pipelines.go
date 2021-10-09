@@ -53,7 +53,7 @@ func RudimentaryStreamPipeline() []int {
 	return outputs
 }
 
-// ChannelStreamPipeline Channels are suited to pipelines because they can receive and signal values,
+// ChannelStreamPipeline Channels are suited to pipelining as they can receive and signal values,
 // are safe to use concurrently, can be ranged over and are reified by Go
 func ChannelStreamPipeline(done chan interface{}) <-chan int {
 	// the done channel is given by callers which know when to stop the pipeline

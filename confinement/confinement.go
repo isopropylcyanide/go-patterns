@@ -7,7 +7,7 @@ import (
 )
 
 // Zen: In a concurrent environment, apart from mutexes and channels, there are two safe alternatives
-// Immutability and confinement. In confinement you restrict the scope, either through standards
+// Immutability and confinement. In confinement, you restrict the scope, either through standards
 // or lexically. Confinement is lightweight has a lower developer cognitive load.
 
 func AdhocConfinement() {
@@ -34,7 +34,7 @@ func AdhocConfinement() {
 }
 
 func LexicalConfinement() {
-	// notice we emit a read only channel because we own the write & closure
+	// notice we emit a read only channel because we own the write as well as closure
 	producer := func() <-chan int {
 		// channel is instantiated within the lexical scope pf producer
 		// basically no other goroutine writes to it

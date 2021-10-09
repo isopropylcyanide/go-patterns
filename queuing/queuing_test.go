@@ -15,11 +15,11 @@ import (
 // effect which can be good/bad depending on the system. Queuing trades utilization
 // for lag. It does increase performance but only in applicable situations
 // The only applicable systems are
-// 	  - A1) If batching requests in a stage saves time
-//    - A2) If delays in a stage produce a feedback loop into the system
+// 	  - A1: If batching requests in a stage saves time
+//    - A2: If delays in a stage produce a feedback loop into the system
 // Queueing should ideally be implemented
-//    - S1) At the entrance to your pipeline
-//    - S2) In stages where batching will lead to higher efficiency
+//    - S1: At the entrance to your pipeline
+//    - S2: In stages where batching will lead to higher efficiency
 
 func BenchmarkUnbufferedWrite(b *testing.B) {
 	performSimpleWrite(b, tmpFileOrFatal())
@@ -39,7 +39,6 @@ func performSimpleWrite(b *testing.B, writer io.Writer) {
 	for bt := range g.Take(done, g.Repeat(done, byte(0)), b.N) {
 		_, _ = writer.Write([]byte{bt.(byte)})
 	}
-
 }
 
 func tmpFileOrFatal() *os.File {

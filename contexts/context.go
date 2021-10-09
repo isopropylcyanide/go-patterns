@@ -9,8 +9,8 @@ import (
 
 // Zen: Context provides an API for cancelling the branches of a function's call graph
 // It also provides a data bag for transporting request scoped data through the graph
-// For cancellation of a goroutine, it's parent may want to cancel it or it may want to
-// cancel all of its children. Any blocking op within the goroutine needs to be pre-emptable
+// For cancellation of a goroutine, it's parent may want to cancel it, or it may want to
+// cancel all of its children. Any blocking op within the goroutine needs to be preemptive
 // so that it may be cancelled. Context helps manage all of these
 
 // prints a greeting and farewell. To print, we have generators for each. To generate, we
@@ -39,7 +39,7 @@ type contextConfiguration struct {
 // to get keys out of that baggage
 type ctxKey string
 
-const ctxConfigKey = "config"
+const ctxConfigKey ctxKey = "config"
 
 // type safe way to get greet delay duration from the context baggage
 func greetDelay(ctx context.Context) time.Duration {

@@ -74,7 +74,7 @@ func LeakGoRoutineBlockedOnReadingFixedUsingDoneChannel() {
 	done := make(chan interface{})
 	result := doWork(done, nil)
 
-	// in a separate routine, we wait for a few seconds before deciding it is enough
+	// in a separate routine, we wait for a few seconds before deciding it is enough,
 	// and then we cancel the done channel signalling the goroutine above to return
 	go func(tolerance int) {
 		fmt.Println("will wait for a maximum of ", tolerance, " seconds")
@@ -112,7 +112,7 @@ func LeakGoRoutineBlockedOnWriting() {
 
 // LeakGoRoutineBlockedOnWritingFixedUsingDoneChannel is the same as LeakGoRoutineBlockedOnWriting
 // but there's no leak here because the main closes the channel and the random generator goroutine
-// knows its time to stop
+// knows it's time to stop
 func LeakGoRoutineBlockedOnWritingFixedUsingDoneChannel() {
 	doWork := func(done <-chan interface{}) <-chan int {
 		results := make(chan int)

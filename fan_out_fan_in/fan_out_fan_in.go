@@ -9,9 +9,9 @@ import (
 	"sync"
 )
 
-// Zen: Pipelines are elegant composable stages but they can be slow, very slow.
+// Zen: Pipelines are elegant composable stages, but they can be slow, very slow.
 // In some situations we fan out to process the input from the stage above in parallel.
-// This improves runtime of the stage overall and it is said to be fanned out.
+// This improves runtime of the stage overall, and it is said to be fanned out.
 // Requirements: The stage shouldn't rely on state/values that it has calculated before.
 // Requirements: It takes a long time to run to warrant a fan-out.
 

@@ -10,7 +10,7 @@ import "time"
 // time a unit of work is done. Unit of work here is to generate nums to a stream on a channel
 func HeartbeatGenerateIntStream(done <-chan interface{}, sleep time.Duration, nums ...int) (<-chan interface{}, <-chan int) {
 	heartbeatCh := make(chan interface{}, 1)
-	// ensure at least one pulse is sent even if no one is listening in time for the event to occuir
+	// ensure at least one pulse is sent even if no one is listening in time for the event to occur
 	intStream := make(chan int)
 
 	go func() {

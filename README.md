@@ -19,5 +19,6 @@ Various patterns and dabble in Golang.
 | Fan In/Out | Fanning pipeline stages in/out for performance and efficiency | Concurrency in Go |
 | Error Propagation | Using wrapped high level errors to propagate errors | Concurrency in Go |
 | Heartbeats | A way to signal health in concurrent life for waiting parties | Concurrency in Go |
+| Replicated requests | A fault tolerant but expensive way to service requests faster | Concurrency in Go |
 
 

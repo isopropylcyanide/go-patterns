@@ -13,7 +13,7 @@ import (
 
 func TestRepeatGeneratorDemo(t *testing.T) {
 	done := make(chan interface{})
-	// here we would Repeat forever. to curb this, lets close channel in an another goroutine
+	// here we would Repeat forever. to curb this, lets close channel in a goroutine
 	// that will let the main run for sometime until "it" (not main) closes channel
 	go func() {
 		time.Sleep(100 * time.Microsecond)
@@ -63,7 +63,7 @@ func TestRepeatFunctionWithTakeDemo(t *testing.T) {
 
 func TestToStringRepeatFunctionWithTakeDemo(t *testing.T) {
 	// This demonstrates the usage of ToString applied on a list of input. We'll also
-	// write a benchmark to prove that adding to string doesn't add lot of overhead
+	// write a benchmark to prove that adding to string doesn't add a lot of overhead
 	done := make(chan interface{})
 	defer close(done)
 
