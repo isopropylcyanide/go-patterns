@@ -20,5 +20,6 @@ Various patterns and dabble in Golang.
 | Error Propagation | Using wrapped high level errors to propagate errors | Concurrency in Go |
 | Heartbeats | A way to signal health in concurrent life for waiting parties | Concurrency in Go |
 | Replicated requests | A fault tolerant but expensive way to service requests faster | Concurrency in Go |
+| Rate limiter | Constrain access to resource for a finite period for resiliency | Concurrency in Go |
 
 
